@@ -201,7 +201,7 @@ def is_relevant_event(event):
     name = event.name.lower()
     location = (event.location or "").lower()
 
-    # --- RCQ (alle Shops) ---
+    # RCQ (alle Shops)
     if any(x in name for x in [
         "rcq",
         "regional championship",
@@ -212,18 +212,18 @@ def is_relevant_event(event):
     ]):
         return True
 
-    # --- Store Championship (alle Shops) ---
+    # Store Championship (alle Shops)
     if "store championship" in name or "championship" in name:
         return True
 
-    # --- Friday Night Modern (alle Shops) ---
+    # Friday Night Modern (alle Shops)
     if (
         any(x in name for x in ["friday night", "fnm", "friday night magic"])
         and "modern" in name
     ):
         return True
 
-    # --- After Work Modern (Deck & Dice) ---
+    # After Work Modern (nur Deck & Dice / DD Munich)
     if (
         any(x in name for x in ["after", "afterwork", "after-work"])
         and "modern" in name
@@ -240,18 +240,22 @@ def is_relevant_event(event):
 def set_default_duration(event):
     name = event.name.lower()
 
+    # RCQ
     if "rcq" in name or "regional championship" in name or "qualifier" in name:
         event.duration = timedelta(hours=6)
         return
 
+    # Friday Night Magic Modern
     if ("friday night" in name or "fnm" in name) and "modern" in name:
         event.duration = timedelta(hours=4)
         return
 
+    # After Work Modern
     if "after" in name and "modern" in name:
         event.duration = timedelta(hours=3)
         return
 
+    # Store Championship
     if "store championship" in name or "championship" in name:
         event.duration = timedelta(hours=5)
         return
