@@ -2,36 +2,12 @@ BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:ics.py - http://git.io/lLljaA
 BEGIN:VEVENT
-DESCRIPTION:Gewinner des WPN Qualifier erhält 1 Slot für den Regional Championship.
-DURATION:PT6H
-LOCATION:BB-Spiele
-DTSTART:20260321T100000Z
-SUMMARY:Regional Championship Store Qualifier - Standard
-UID:fb903105-6acd-4151-a778-30408e0f9d02@fb90.org
-END:VEVENT
-BEGIN:VEVENT
 DESCRIPTION:Buche Deinen Platz für dieses Event
 DURATION:PT4H
 LOCATION:FUNtainment München
-DTSTART:20260417T170000Z
+DTSTART:20260327T170000Z
 SUMMARY:Friday Night Magic: Modern
-UID:286d37a2-771d-49c1-8780-a26d498472c2@286d.org
-END:VEVENT
-BEGIN:VEVENT
-DESCRIPTION:Gewinner des WPN Qualifier erhält 1 Slot für den Regional Championship.
-DURATION:PT6H
-LOCATION:BB-Spiele
-DTSTART:20260404T110000Z
-SUMMARY:Regional Championship Store Qualifier - Modern
-UID:611746e9-244c-4c0b-9364-fc280f53117f@6117.org
-END:VEVENT
-BEGIN:VEVENT
-DESCRIPTION:Buche Deinen Platz für dieses Event
-DURATION:PT4H
-LOCATION:FUNtainment München
-DTSTART:20260320T170000Z
-SUMMARY:Friday Night Magic: Modern
-UID:a799d566-8129-4e0e-9911-a8bcbbfb8194@a799.org
+UID:f46d6f0c-a58b-4265-ac8c-89ada9e535bd@f46d.org
 END:VEVENT
 BEGIN:VEVENT
 DESCRIPTION:Buche Deinen Platz für dieses Event
@@ -39,15 +15,15 @@ DURATION:PT4H
 LOCATION:FUNtainment München
 DTSTART:20260410T170000Z
 SUMMARY:Friday Night Magic: Modern
-UID:6afb29d6-ae7c-4912-abba-1a7ad0371d26@6afb.org
+UID:47a4c868-e157-40be-af88-94f37028be71@47a4.org
 END:VEVENT
 BEGIN:VEVENT
 DESCRIPTION:Buche Deinen Platz für dieses Event
 DURATION:PT4H
 LOCATION:FUNtainment München
-DTSTART:20260327T170000Z
+DTSTART:20260417T170000Z
 SUMMARY:Friday Night Magic: Modern
-UID:8d1d7211-9d41-4a39-9c9a-c302d6010ce9@8d1d.org
+UID:acf44286-992b-4015-a308-d2d3962db591@acf4.org
 END:VEVENT
 BEGIN:VEVENT
 DESCRIPTION:Buche Deinen Platz für dieses Event
@@ -55,6 +31,30 @@ DURATION:PT4H
 LOCATION:FUNtainment München
 DTSTART:20260424T170000Z
 SUMMARY:Friday Night Magic: Modern
-UID:4b13e66e-d339-490b-a82d-1efe8705e161@4b13.org
+UID:bdfd49fc-23b8-4711-80f8-13a014988171@bdfd.org
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Buche Deinen Platz für dieses Event
+DURATION:PT4H
+LOCATION:FUNtainment München
+DTSTART:20260320T170000Z
+SUMMARY:Friday Night Magic: Modern
+UID:8f94e1d9-7e92-4bd5-bbdb-8ecdaaf5f91d@8f94.org
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Gewinner des WPN Qualifier erhält 1 Slot für den Regional Championship.
+DURATION:PT6H
+LOCATION:BB-Spiele
+DTSTART:20260321T100000Z
+SUMMARY:Regional Championship Store Qualifier - Standard
+UID:2c1a8d47-c8c5-4dcb-932e-a2221d47cfae@2c1a.org
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Gewinner des WPN Qualifier erhält 1 Slot für den Regional Championship.
+DURATION:PT6H
+LOCATION:BB-Spiele
+DTSTART:20260404T110000Z
+SUMMARY:Regional Championship Store Qualifier - Modern
+UID:0a369c50-3a4b-4b57-a3b3-ba63ddef4601@0a36.org
 END:VEVENT
 END:VCALENDAR
