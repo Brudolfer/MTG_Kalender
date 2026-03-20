@@ -1,16 +1,16 @@
-name: Generate Magic Calendar
+name: Generate Calendar
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 3 * * *"
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -20,13 +20,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests beautifulsoup4 ics
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
 
-      - name: Run calendar generator
-        run: python generate_calendar.py
+      - name: Generate calendar
+        run: |
+          python generate_calendar.py
 
-      - name: Upload ICS file
-        uses: actions/upload-artifact@v4
-        with:
-          name: magic-calendar
-          path: magic.ics
+      - name: Commit calendar
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add magic.ics
+          git commit -m "Update calendar" || echo "Keine Änderungen"
+          git push
