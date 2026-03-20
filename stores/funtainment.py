@@ -5,6 +5,51 @@ from zoneinfo import ZoneInfo
 
 TZ = ZoneInfo("Europe/Berlin")
 
+
+def is_modern_or_rcq(title: str) -> bool:
+    """Filtert nur Modern-Events oder RCQs heraus."""
+    title = title.lower()
+
+    include = [
+        "modern",
+        "rcq",
+        "regional championship qualifier",
+        "qualifier",
+    ]
+
+    exclude = [
+        "commander",
+        "edh",
+        "draft",
+        "sealed",
+        "prerelease",
+        "pre-release",
+        "standard",
+        "pauper",
+        "booster",
+        "casual",
+        "painting",
+        "workshop",
+        "warhammer",
+        "40k",
+        "age of sigmar",
+        "pokémon",
+        "pokemon",
+        "lorcana",
+        "yu-gi-oh",
+        "yugioh",
+        "flesh and blood",
+        "fab",
+        "one piece",
+        "star wars",
+    ]
+
+    if any(x in title for x in exclude):
+        return False
+
+    return any(x in title for x in include)
+
+
 def fetch_funtainment_events():
     print("Hole Events von Funtainment...")
 
@@ -25,7 +70,12 @@ def fetch_funtainment_events():
         title_el = card.select_one(".netzp-events-title")
         if not title_el:
             continue
+
         title = title_el.get_text(strip=True)
+
+        # Filter anwenden
+        if not is_modern_or_rcq(title):
+            continue
 
         date_el = card.select_one(".icon-calendar + span")
         if not date_el:
@@ -61,5 +111,5 @@ def fetch_funtainment_events():
             "description": description,
         })
 
-    print(f"Funtainment Events gefunden: {len(events)}")
+    print(f"Funtainment Modern/RCQ Events gefunden: {len(events)}")
     return events
