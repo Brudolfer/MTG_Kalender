@@ -2,56 +2,58 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
-import re
 
 TZ = ZoneInfo("Europe/Berlin")
 
-# ---------------------------------------------------------
-# Nur relevante Events für BB-Spiele:
-# - RCQ
-# - Store Championship (alle Formate)
-# ---------------------------------------------------------
-def is_relevant_bb_event(title: str) -> bool:
-    t = title.lower()
+
+def is_modern_or_rcq(title: str) -> bool:
+    """Filtert nur Modern-Events oder RCQs heraus."""
+    title = title.lower()
 
     include = [
+        "modern",
         "rcq",
         "regional championship qualifier",
-        "store championship",
-        "championship",
+        "qualifier",
     ]
 
-    return any(x in t for x in include)
+    exclude = [
+        "commander",
+        "edh",
+        "draft",
+        "sealed",
+        "prerelease",
+        "pre-release",
+        "standard",
+        "pauper",
+        "booster",
+        "casual",
+        "painting",
+        "workshop",
+        "warhammer",
+        "40k",
+        "age of sigmar",
+        "pokémon",
+        "pokemon",
+        "lorcana",
+        "yu-gi-oh",
+        "yugioh",
+        "flesh and blood",
+        "fab",
+        "one piece",
+        "star wars",
+    ]
+
+    if any(x in title for x in exclude):
+        return False
+
+    return any(x in title for x in include)
 
 
-# ---------------------------------------------------------
-# Datum + Uhrzeit extrahieren
-# Beispiel: "20.03.2026 18:30"
-# ---------------------------------------------------------
-def parse_datetime(text: str):
-    text = text.strip()
-
-    m = re.match(r"(\d{1,2})\.(\d{1,2})\.(\d{4})\s+(\d{1,2}):(\d{2})", text)
-    if m:
-        day = int(m.group(1))
-        month = int(m.group(2))
-        year = int(m.group(3))
-        hour = int(m.group(4))
-        minute = int(m.group(5))
-        start = datetime(year, month, day, hour, minute, tzinfo=TZ)
-        end = start + timedelta(hours=3)
-        return start, end
-
-    return None, None
-
-
-# ---------------------------------------------------------
-# Events von BB-Spiele scrapen
-# ---------------------------------------------------------
 def fetch_bb_spiele_events():
     print("Hole Events von BB-Spiele...")
 
-    url = "https://www.bb-spiele.de/events"
+    url = "https://www.bb-spiele.de/events?categories=0196a9a7d19270a89170491be8392535&p=1"
     headers = {"User-Agent": "Mozilla/5.0"}
 
     try:
@@ -62,75 +64,52 @@ def fetch_bb_spiele_events():
         return []
 
     soup = BeautifulSoup(resp.text, "html.parser")
-
-    # Alle bekannten Event-Selektoren von "The Events Calendar"
-    selectors = [
-        ".tribe-events-calendar-list__event",
-        ".tribe-events-calendar-day__event",
-        ".tribe-events-calendar-month__event",
-        ".tribe-events-pro-week-grid__event",
-        ".tribe-events-pro-map__event-card",
-        ".tribe-events-pro-photo__event",
-        ".tribe-events-calendar-latest-past__event",
-        ".tribe-events-calendar-latest__event",
-        ".tribe-events-event-card",  # neuere Versionen
-    ]
-
-    cards = []
-    for sel in selectors:
-        found = soup.select(sel)
-        if found:
-            print(f"Selector '{sel}' → {len(found)} Events gefunden")
-            cards.extend(found)
-
-    print(f"Gesamt gefundene Event-Cards: {len(cards)}")
-
     events = []
 
-    for card in cards:
-        # Titel
-        title_el = (
-            card.select_one(".tribe-events-calendar-list__event-title-link")
-            or card.select_one(".tribe-events-event-title")
-            or card.select_one("h3")
-            or card.select_one("a")
-        )
-
-        # Datum
-        date_el = (
-            card.select_one(".tribe-events-calendar-list__event-datetime")
-            or card.select_one(".tribe-event-date-start")
-            or card.select_one(".tribe-events-event-datetime")
-            or card.select_one(".tribe-events-event-date")
-        )
-
-        if not title_el or not date_el:
+    for card in soup.select(".events-card"):
+        title_el = card.select_one(".netzp-events-title")
+        if not title_el:
             continue
 
         title = title_el.get_text(strip=True)
-        date_text = date_el.get_text(strip=True)
 
-        print(f"  → Card: '{title}' | Datum: '{date_text}'")
-
-        if not is_relevant_bb_event(title):
-            print("    ✗ Filter: nicht relevant für BB-Spiele")
+        # Filter anwenden
+        if not is_modern_or_rcq(title):
             continue
 
-        start, end = parse_datetime(date_text)
-        if not start:
-            print("    ✗ Datum/Uhrzeit nicht erkannt")
+        date_el = card.select_one(".icon-calendar + span")
+        if not date_el:
             continue
 
-        print("    ✓ Relevantes Event übernommen")
+        raw = date_el.get_text(strip=True)
+        parts = raw.split(",")
+        if len(parts) < 3:
+            continue
+
+        date_str = parts[1].strip()
+        time_str = parts[2].strip().split("-")[0].strip()
+
+        try:
+            start = datetime.strptime(f"{date_str} {time_str}", "%d.%m.%y %H:%M").replace(tzinfo=TZ)
+        except:
+            continue
+
+        end = start + timedelta(hours=3)
+
+        loc_el = card.select_one(".icon-marker + b")
+        location = loc_el.get_text(strip=True) if loc_el else "BB-Spiele"
+
+        desc_el = card.select_one(".card-text.lead")
+        description = desc_el.get_text(strip=True) if desc_el else ""
 
         events.append({
             "title": title,
             "start": start,
             "end": end,
-            "location": "BB-Spiele München",
-            "url": url,
-            "description": "",
+            "location": location,
+            "url": "https://www.bb-spiele.de",
+            "description": description,
         })
 
-    print(f"BB-Spiele relevante Events: {len(events)}")
+    print(f"BB-Spiele Modern/RCQ Events gefunden: {len(events)}")
     return events
