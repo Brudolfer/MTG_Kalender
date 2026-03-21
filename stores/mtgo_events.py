@@ -66,7 +66,7 @@ def extract_event(text: str):
 
 
 # ---------------------------------------------------------
-# Eine einzelne Woche scrapen
+# Eine Woche aus einem Container scrapen
 # ---------------------------------------------------------
 def scrape_week(container, month, year):
     events = []
@@ -128,7 +128,7 @@ def scrape_week(container, month, year):
 
 
 # ---------------------------------------------------------
-# Hauptfunktion: ALLE Wochen scrapen
+# Hauptfunktion: aktuelle Woche scrapen
 # ---------------------------------------------------------
 def fetch_mtgo_events():
     print("Hole MTGO Events...")
@@ -145,33 +145,28 @@ def fetch_mtgo_events():
 
     soup = BeautifulSoup(resp.text, "html.parser")
 
-    # Monat + Jahr stehen im <h1>
+    # Monat + Jahr stehen im <h1>, z.B. "March 2026"
     header = soup.select_one("h1")
     if not header:
+        print("MTGO: Kein <h1> mit Monat/Jahr gefunden")
         return []
 
     header_text = header.get_text(strip=True)
     m2 = re.match(r"([A-Za-z]+)\s+(\d{4})", header_text)
     if not m2:
+        print(f"MTGO: Konnte Monat/Jahr nicht parsen aus: '{header_text}'")
         return []
 
     month_name = m2.group(1)
     year = int(m2.group(2))
     month = datetime.strptime(month_name, "%B").month
 
-    all_events = []
+    # Ersten Container nehmen (aktuelle Woche)
+    container = soup.select_one("div.container")
+    if not container:
+        print("MTGO: Kein div.container gefunden")
+        return []
 
-    # Alle Wochen sind im HTML → alle Container scrapen
-    for week in range(0, 4):
-        url = f"https://mtgoupdate.com/weekdata.php?week={week}"
-        ...
-
-    print(f"Gefundene Wochen: {len(containers)}")
-
-    for idx, container in enumerate(containers):
-        week_events = scrape_week(container, month, year)
-        print(f"Woche {idx}: {len(week_events)} Modern-Events")
-        all_events.extend(week_events)
-
-    print(f"MTGO Modern Events gesamt: {len(all_events)}")
-    return all_events
+    week_events = scrape_week(container, month, year)
+    print(f"MTGO Modern Events gefunden: {len(week_events)}")
+    return week_events
