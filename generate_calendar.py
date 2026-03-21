@@ -14,14 +14,16 @@ from stores.mtgo_events import fetch_mtgo_events
 TZ = ZoneInfo("Europe/Berlin")
 HISTORY_FILE = Path("events_history.json")
 
+
 # ---------------------------------------------------------
 # ICS-Helfer
 # ---------------------------------------------------------
 def format_dt(dt: datetime) -> str:
+    # lokale Zeit in „kalenderfreundlichem“ Format
     return dt.astimezone(TZ).strftime("%Y%m%dT%H%M%S")
 
 
-def generate_ics(events, filename="magic.ics"):
+def generate_ics(events, filename: str = "magic.ics") -> None:
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
@@ -29,19 +31,21 @@ def generate_ics(events, filename="magic.ics"):
         "CALSCALE:GREGORIAN",
     ]
 
+    now_str = format_dt(datetime.now(TZ))
+
     for ev in events:
         uid = f"{uuid.uuid4()}@magic-munich"
 
         lines.append("BEGIN:VEVENT")
         lines.append(f"UID:{uid}")
-        lines.append(f"DTSTAMP:{format_dt(datetime.now(TZ))}")
+        lines.append(f"DTSTAMP:{now_str}")
         lines.append(f"DTSTART:{format_dt(ev['start'])}")
         lines.append(f"DTEND:{format_dt(ev['end'])}")
         lines.append(f"SUMMARY:{ev['title']}")
         lines.append(f"LOCATION:{ev.get('location', '')}")
         lines.append(f"URL:{ev.get('url', '')}")
 
-        desc = ev.get("description", "")
+        desc = ev.get("description", "") or ""
         desc = desc.replace("\n", " ").replace("\r", " ")
         lines.append(f"DESCRIPTION:{desc}")
 
@@ -59,23 +63,28 @@ def load_history():
     if HISTORY_FILE.exists():
         try:
             return json.loads(HISTORY_FILE.read_text(encoding="utf-8"))
-        except:
+        except Exception:
             return []
     return []
 
 
-def save_history(events):
+def save_history(events) -> None:
     serializable = []
     for ev in events:
-        serializable.append({
-            "title": ev["title"],
-            "start": ev["start"].isoformat(),
-            "end": ev["end"].isoformat(),
-            "location": ev.get("location", ""),
-            "url": ev.get("url", ""),
-            "description": ev.get("description", "")
-        })
-    HISTORY_FILE.write_text(json.dumps(serializable, indent=2), encoding="utf-8")
+        serializable.append(
+            {
+                "title": ev["title"],
+                "start": ev["start"].isoformat(),
+                "end": ev["end"].isoformat(),
+                "location": ev.get("location", ""),
+                "url": ev.get("url", ""),
+                "description": ev.get("description", ""),
+            }
+        )
+    HISTORY_FILE.write_text(
+        json.dumps(serializable, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
 
 
 # ---------------------------------------------------------
@@ -84,11 +93,10 @@ def save_history(events):
 def generate_proxy_events(event):
     title = event["title"].lower()
 
-    # ❌ RCQ → niemals Proxy-Events
+    # RCQ → niemals Proxy-Events
     if "rcq" in title or "regional championship qualifier" in title:
         return []
 
-    # Wöchentliche Serien
     weekly_formats = [
         "after work standard",
         "after work modern",
@@ -96,7 +104,6 @@ def generate_proxy_events(event):
         "after work premodern",
     ]
 
-    # 14-tägige Serien
     biweekly_formats = [
         "friday night modern",
         "friday night standard",
@@ -113,22 +120,21 @@ def generate_proxy_events(event):
     end = event["end"]
 
     for i in range(1, 13):
-        if is_biweekly:
-            delta = timedelta(weeks=2)
-        else:
-            delta = timedelta(weeks=1)
+        delta = timedelta(weeks=2) if is_biweekly else timedelta(weeks=1)
 
         new_start = start + delta * i
         new_end = end + delta * i
 
-        proxy_events.append({
-            "title": event["title"],
-            "start": new_start,
-            "end": new_end,
-            "location": event.get("location", ""),
-            "url": event.get("url", ""),
-            "description": event.get("description", "")
-        })
+        proxy_events.append(
+            {
+                "title": event["title"],
+                "start": new_start,
+                "end": new_end,
+                "location": event.get("location", ""),
+                "url": event.get("url", ""),
+                "description": event.get("description", ""),
+            }
+        )
 
     return proxy_events
 
@@ -190,30 +196,32 @@ def main():
 
     restored = []
     for ev in history:
-        restored.append({
-            "title": ev["title"],
-            "start": datetime.fromisoformat(ev["start"]),
-            "end": datetime.fromisoformat(ev["end"]),
-            "location": ev.get("location", ""),
-            "url": ev.get("url", ""),
-            "description": ev.get("description", "")
-        })
+        restored.append(
+            {
+                "title": ev["title"],
+                "start": datetime.fromisoformat(ev["start"]),
+                "end": datetime.fromisoformat(ev["end"]),
+                "location": ev.get("location", ""),
+                "url": ev.get("url", ""),
+                "description": ev.get("description", ""),
+            }
+        )
 
     # Neue + Proxy + alte Events zusammenführen
     combined = restored + all_events + proxy_events
 
-    # Duplikate entfernen
-    # ❗ Echte Events werden NIE überschrieben
+    # Duplikate entfernen (Titel + Startzeit)
     unique = {}
     for ev in combined:
         key = (ev["title"].lower().strip(), ev["start"].isoformat())
-
         if key not in unique:
             unique[key] = ev
 
     final_events = list(unique.values())
 
-    print(f"Gesamtanzahl Events (inkl. Vergangenheit & Proxy): {len(final_events)}")
+    print(
+        f"Gesamtanzahl Events (inkl. Vergangenheit & Proxy): {len(final_events)}"
+    )
 
     # History aktualisieren
     save_history(final_events)
