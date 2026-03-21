@@ -11,7 +11,6 @@ def is_modern_or_rcq(title: str) -> bool:
     title = title.lower()
 
     include = [
-        "modern",
         "rcq",
         "regional championship qualifier",
         "qualifier",
