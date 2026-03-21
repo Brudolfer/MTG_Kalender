@@ -21,7 +21,6 @@ def is_relevant_bb_event(title: str) -> bool:
         "championship",
     ]
 
-    # Nur Events behalten, die eines der Include-Keywords enthalten
     return any(x in t for x in include)
 
 
@@ -32,7 +31,6 @@ def is_relevant_bb_event(title: str) -> bool:
 def parse_datetime(text: str):
     text = text.strip()
 
-    # Versuche Standardformat: 20.03.2026 18:30
     m = re.match(r"(\d{1,2})\.(\d{1,2})\.(\d{4})\s+(\d{1,2}):(\d{2})", text)
     if m:
         day = int(m.group(1))
@@ -53,7 +51,9 @@ def parse_datetime(text: str):
 def fetch_bb_spiele_events():
     print("Hole Events von BB-Spiele...")
 
-    url = "https://www.bb-spiele.de/veranstaltungen/"
+    # ✔ KORREKTE URL
+    url = "https://www.bb-spiele.de/events"
+
     headers = {"User-Agent": "Mozilla/5.0"}
 
     try:
@@ -67,7 +67,7 @@ def fetch_bb_spiele_events():
 
     events = []
 
-    # Event-Container (WordPress / The Events Calendar)
+    # Event-Container (The Events Calendar / WP)
     cards = soup.select(".tribe-events-calendar-list__event")
     print(f"Gefundene Event-Cards: {len(cards)}")
 
@@ -100,7 +100,7 @@ def fetch_bb_spiele_events():
             "start": start,
             "end": end,
             "location": "BB-Spiele München",
-            "url": "https://www.bb-spiele.de/veranstaltungen/",
+            "url": url,
             "description": "",
         })
 
