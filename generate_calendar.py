@@ -89,6 +89,7 @@ def generate_proxy_events(event):
 
     # Wöchentliche Serien
     weekly_formats = [
+        "after work standard",
         "after work modern",
         "after work legacy",
         "after work premodern",
@@ -97,6 +98,7 @@ def generate_proxy_events(event):
     # 14-tägige Serien
     biweekly_formats = [
         "friday night modern",
+        "friday night standard",
     ]
 
     is_weekly = any(f in title for f in weekly_formats)
