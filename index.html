@@ -4,37 +4,67 @@
   <meta charset="UTF-8">
   <title>Minga Boys Magic Kalender</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <style>
     body {
-      font-family: system-ui, sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 20px;
-      line-height: 1.6;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #fafafa;
+      color: #222;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
     }
-    a {
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 22px;
+      background: #0078ff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
       font-size: 1.2rem;
-      color: #0066cc;
+      font-weight: 600;
+      transition: background 0.2s ease;
+    }
+
+    .button:hover {
+      background: #005fcc;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #666;
     }
   </style>
 </head>
+
 <body>
 
   <h1>Minga Boys Magic Kalender</h1>
 
   <p>
-    Klicke hier, um den Kalender zu abonnieren:
+    Abonniere unseren automatisch aktualisierten Event‑Kalender.
   </p>
 
-  <p>
-    <a href="webcal://raw.githubusercontent.com/MingaBoys/Minga_Boys_Magic_Calendar/main/magic.ics">
-      📅 Kalender abonnieren
-    </a>
-  </p>
+  <a class="button"
+     href="webcal://raw.githubusercontent.com/chillerpillar11/Minga_Boys_Magic_Calendar/main/magic.ics">
+    📅 Kalender abonnieren
+  </a>
 
-  <p>
+  <footer>
     Der Kalender aktualisiert sich automatisch, sobald neue Events eingetragen werden.
-  </p>
+  </footer>
 
 </body>
 </html>
