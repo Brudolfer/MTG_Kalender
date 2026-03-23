@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import uuid
 import json
+import requests
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
@@ -13,6 +14,30 @@ from stores.fanfinity import fetch_fanfinity_events
 
 TZ = ZoneInfo("Europe/Berlin")
 HISTORY_FILE = Path("events_history.json")
+
+# ---------------------------------------------------------
+# Feiertage aus API laden
+# ---------------------------------------------------------
+def load_bavarian_holidays(year):
+    """Lädt alle bayerischen Feiertage eines Jahres aus der Nager.Date API."""
+    url = f"https://date.nager.at/api/v3/PublicHolidays/{year}/DE"
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+    except Exception as e:
+        print("Fehler beim Laden der Feiertage:", e)
+        return set()
+
+    holidays = set()
+
+    for entry in data:
+        counties = entry.get("counties")
+        if counties is None or "DE-BY" in counties:
+            holidays.add(datetime.fromisoformat(entry["date"]).date())
+
+    return holidays
+
 
 # ---------------------------------------------------------
 # ICS-Helfer
@@ -89,7 +114,7 @@ def save_history(events):
 
 
 # ---------------------------------------------------------
-# Proxy-Event-Generator (12 Wiederholungen)
+# Proxy-Event-Generator (bis Jahresende, Feiertage skippen)
 # ---------------------------------------------------------
 def generate_proxy_events(event):
     title = event["title"].lower()
@@ -120,33 +145,23 @@ def generate_proxy_events(event):
 
     proxy_events = []
 
-    # Originaldaten
     start = event["start"]
     end = event["end"]
 
-    # ⭐ Wiederholungsintervall
     delta = timedelta(weeks=2) if is_biweekly else timedelta(weeks=1)
 
-    # ⭐ Bis Jahresende generieren (timezone-aware!)
+    # ⭐ Feiertage dynamisch laden
+    holidays = load_bavarian_holidays(start.year)
+
+    # ⭐ Bis Jahresende generieren
     year_end = datetime(start.year, 12, 31, tzinfo=TZ)
 
-    # ⭐ Münchner Feiertage (timezone-aware)
-    holidays = {
-        datetime(start.year, 1, 1, tzinfo=TZ),   # Neujahr
-        datetime(start.year, 5, 1, tzinfo=TZ),   # Tag der Arbeit
-        datetime(start.year, 10, 3, tzinfo=TZ),  # Tag der Deutschen Einheit
-        datetime(start.year, 12, 25, tzinfo=TZ), # Weihnachten
-        datetime(start.year, 12, 26, tzinfo=TZ), # 2. Weihnachtstag
-    }
-
-    # ⭐ Erste Wiederholung
     next_start = start + delta
     next_end = end + delta
 
-    # ⭐ Wiederholen bis Jahresende
     while next_start <= year_end:
         # Feiertage überspringen
-        if next_start.date() not in {h.date() for h in holidays}:
+        if next_start.date() not in holidays:
             proxy_events.append({
                 "title": event["title"],
                 "start": next_start,
@@ -161,6 +176,7 @@ def generate_proxy_events(event):
         next_end += delta
 
     return proxy_events
+
 
 # ---------------------------------------------------------
 # MAIN
@@ -198,7 +214,7 @@ def main():
     except Exception as e:
         print("Fehler bei DD Munich:", e)
 
-    # ⭐ Fanfinity
+    # Fanfinity
     try:
         events = fetch_fanfinity_events()
         for ev in events:
