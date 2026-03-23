@@ -5,7 +5,8 @@
     "end": "2026-04-04T14:00:00+02:00",
     "location": "BB-Spiele",
     "url": "https://www.bb-spiele.de",
-    "description": "Gewinner des WPN Qualifier erh\u00e4lt 1 Slot f\u00fcr den Regional Championship."
+    "description": "Gewinner des WPN Qualifier erh\u00e4lt 1 Slot f\u00fcr den Regional Championship.",
+    "all_day": false
   },
   {
     "title": "Funtainment \u2013 Friday Night Magic: Modern",
@@ -13,7 +14,8 @@
     "end": "2026-03-27T20:00:00+01:00",
     "location": "FUNtainment M\u00fcnchen",
     "url": "https://www.funtainment.de",
-    "description": "Buche Deinen Platz f\u00fcr dieses Event"
+    "description": "Buche Deinen Platz f\u00fcr dieses Event",
+    "all_day": false
   },
   {
     "title": "Funtainment \u2013 Friday Night Magic: Modern",
@@ -21,7 +23,8 @@
     "end": "2026-04-10T20:00:00+02:00",
     "location": "FUNtainment M\u00fcnchen",
     "url": "https://www.funtainment.de",
-    "description": "Buche Deinen Platz f\u00fcr dieses Event"
+    "description": "Buche Deinen Platz f\u00fcr dieses Event",
+    "all_day": false
   },
   {
     "title": "Funtainment \u2013 Friday Night Magic: Modern",
@@ -29,7 +32,8 @@
     "end": "2026-04-17T20:00:00+02:00",
     "location": "FUNtainment M\u00fcnchen",
     "url": "https://www.funtainment.de",
-    "description": "Buche Deinen Platz f\u00fcr dieses Event"
+    "description": "Buche Deinen Platz f\u00fcr dieses Event",
+    "all_day": false
   },
   {
     "title": "Funtainment \u2013 Friday Night Magic: Modern",
@@ -37,7 +41,8 @@
     "end": "2026-04-24T20:00:00+02:00",
     "location": "FUNtainment M\u00fcnchen",
     "url": "https://www.funtainment.de",
-    "description": "Buche Deinen Platz f\u00fcr dieses Event"
+    "description": "Buche Deinen Platz f\u00fcr dieses Event",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -45,7 +50,8 @@
     "end": "2026-03-23T22:00:00+01:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -53,7 +59,8 @@
     "end": "2026-03-24T22:00:00+01:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -61,7 +68,8 @@
     "end": "2026-03-25T22:00:00+01:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -69,7 +77,8 @@
     "end": "2026-03-26T22:00:00+01:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -77,7 +86,8 @@
     "end": "2026-03-27T21:30:00+01:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -85,7 +95,8 @@
     "end": "2026-04-03T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -93,7 +104,8 @@
     "end": "2026-03-30T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -101,7 +113,8 @@
     "end": "2026-04-06T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -109,7 +122,8 @@
     "end": "2026-04-13T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -117,7 +131,8 @@
     "end": "2026-04-20T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -125,7 +140,8 @@
     "end": "2026-04-27T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -133,7 +149,8 @@
     "end": "2026-05-04T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -141,7 +158,8 @@
     "end": "2026-05-11T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -149,7 +167,8 @@
     "end": "2026-05-18T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -157,7 +176,8 @@
     "end": "2026-05-25T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -165,7 +185,8 @@
     "end": "2026-06-01T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -173,7 +194,8 @@
     "end": "2026-06-08T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Standard - 19:00 Uhr",
@@ -181,7 +203,8 @@
     "end": "2026-06-15T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -189,7 +212,8 @@
     "end": "2026-03-31T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -197,7 +221,8 @@
     "end": "2026-04-07T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -205,7 +230,8 @@
     "end": "2026-04-14T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -213,7 +239,8 @@
     "end": "2026-04-21T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -221,7 +248,8 @@
     "end": "2026-04-28T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -229,7 +257,8 @@
     "end": "2026-05-05T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -237,7 +266,8 @@
     "end": "2026-05-12T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -245,7 +275,8 @@
     "end": "2026-05-19T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -253,7 +284,8 @@
     "end": "2026-05-26T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -261,7 +293,8 @@
     "end": "2026-06-02T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -269,7 +302,8 @@
     "end": "2026-06-09T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Modern - 19:00 Uhr",
@@ -277,7 +311,8 @@
     "end": "2026-06-16T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -285,7 +320,8 @@
     "end": "2026-04-01T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -293,7 +329,8 @@
     "end": "2026-04-08T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -301,7 +338,8 @@
     "end": "2026-04-15T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -309,7 +347,8 @@
     "end": "2026-04-22T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -317,7 +356,8 @@
     "end": "2026-04-29T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -325,7 +365,8 @@
     "end": "2026-05-06T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -333,7 +374,8 @@
     "end": "2026-05-13T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -341,7 +383,8 @@
     "end": "2026-05-20T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -349,7 +392,8 @@
     "end": "2026-05-27T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -357,7 +401,8 @@
     "end": "2026-06-03T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -365,7 +410,8 @@
     "end": "2026-06-10T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Legacy",
@@ -373,7 +419,8 @@
     "end": "2026-06-17T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -381,7 +428,8 @@
     "end": "2026-04-02T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -389,7 +437,8 @@
     "end": "2026-04-09T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -397,7 +446,8 @@
     "end": "2026-04-16T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -405,7 +455,8 @@
     "end": "2026-04-23T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -413,7 +464,8 @@
     "end": "2026-04-30T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -421,7 +473,8 @@
     "end": "2026-05-07T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -429,7 +482,8 @@
     "end": "2026-05-14T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -437,7 +491,8 @@
     "end": "2026-05-21T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -445,7 +500,8 @@
     "end": "2026-05-28T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -453,7 +509,8 @@
     "end": "2026-06-04T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -461,7 +518,8 @@
     "end": "2026-06-11T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 After Work Premodern 19:00 Uhr",
@@ -469,7 +527,8 @@
     "end": "2026-06-18T22:00:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -477,7 +536,8 @@
     "end": "2026-04-10T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -485,7 +545,8 @@
     "end": "2026-04-24T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -493,7 +554,8 @@
     "end": "2026-05-08T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -501,7 +563,8 @@
     "end": "2026-05-22T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -509,7 +572,8 @@
     "end": "2026-06-05T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -517,7 +581,8 @@
     "end": "2026-06-19T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -525,7 +590,8 @@
     "end": "2026-07-03T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -533,7 +599,8 @@
     "end": "2026-07-17T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -541,7 +608,8 @@
     "end": "2026-07-31T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -549,7 +617,8 @@
     "end": "2026-08-14T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -557,7 +626,8 @@
     "end": "2026-08-28T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Standard 18.30",
@@ -565,7 +635,8 @@
     "end": "2026-09-11T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -573,7 +644,8 @@
     "end": "2026-04-17T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -581,7 +653,8 @@
     "end": "2026-05-01T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -589,7 +662,8 @@
     "end": "2026-05-15T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -597,7 +671,8 @@
     "end": "2026-05-29T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -605,7 +680,8 @@
     "end": "2026-06-12T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -613,7 +689,8 @@
     "end": "2026-06-26T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -621,7 +698,8 @@
     "end": "2026-07-10T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -629,7 +707,8 @@
     "end": "2026-07-24T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -637,7 +716,8 @@
     "end": "2026-08-07T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -645,7 +725,8 @@
     "end": "2026-08-21T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -653,7 +734,8 @@
     "end": "2026-09-04T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
   },
   {
     "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
@@ -661,6 +743,43 @@
     "end": "2026-09-18T21:30:00+02:00",
     "location": "Deck & Dice Munich",
     "url": "https://www.dd-munich.de",
-    "description": ""
+    "description": "",
+    "all_day": false
+  },
+  {
+    "title": "Fanfinity \u2013 Magic Spotlight Series London 2026",
+    "start": "2026-05-08T00:00:00",
+    "end": "2026-05-11T00:00:00",
+    "location": "Online",
+    "url": "https://www.fanfinity.gg/event/magic-spotlight-series-london-2026/",
+    "description": "Event von Fanfinity: Magic Spotlight Series London 2026\nhttps://www.fanfinity.gg/event/magic-spotlight-series-london-2026/",
+    "all_day": true
+  },
+  {
+    "title": "Fanfinity \u2013 Ultimate Guard European Magic Series \u2013 Regional Championship \u2013 Prague 2026",
+    "start": "2026-05-29T00:00:00",
+    "end": "2026-06-01T00:00:00",
+    "location": "Online",
+    "url": "https://www.fanfinity.gg/event/ultimate-guard-european-magic-series-regional-championship-prague-2026/",
+    "description": "Event von Fanfinity: Ultimate Guard European Magic Series \u2013 Regional Championship \u2013 Prague 2026\nhttps://www.fanfinity.gg/event/ultimate-guard-european-magic-series-regional-championship-prague-2026/",
+    "all_day": true
+  },
+  {
+    "title": "Fanfinity \u2013 Magic Spotlight Series Brussels 2026",
+    "start": "2026-07-24T00:00:00",
+    "end": "2026-07-27T00:00:00",
+    "location": "Online",
+    "url": "https://www.fanfinity.gg/event/magic-spotlight-series-brussels-2026/",
+    "description": "Event von Fanfinity: Magic Spotlight Series Brussels 2026\nhttps://www.fanfinity.gg/event/magic-spotlight-series-brussels-2026/",
+    "all_day": true
+  },
+  {
+    "title": "Fanfinity \u2013 Ultimate Guard European Magic Series Regional Championship Ghent 2026",
+    "start": "2026-10-09T00:00:00",
+    "end": "2026-10-12T00:00:00",
+    "location": "Online",
+    "url": "https://www.fanfinity.gg/event/ultimate-guard-european-magic-series-regional-championship-ghent-2026/",
+    "description": "Event von Fanfinity: Ultimate Guard European Magic Series Regional Championship Ghent 2026\nhttps://www.fanfinity.gg/event/ultimate-guard-european-magic-series-regional-championship-ghent-2026/",
+    "all_day": true
   }
 ]
