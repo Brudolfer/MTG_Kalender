@@ -8,7 +8,7 @@ from pathlib import Path
 from stores.bb_spiele import fetch_bb_spiele_events
 from stores.funtainment import fetch_funtainment_events
 from stores.dd_munich import fetch_dd_munich_events
-from stores.fanfinity import fetch_fanfinity_events   # <<< WICHTIG
+from stores.fanfinity import fetch_fanfinity_events
 
 TZ = ZoneInfo("Europe/Berlin")
 
@@ -17,15 +17,21 @@ TZ = ZoneInfo("Europe/Berlin")
 # ICS-Helfer
 # ---------------------------------------------------------
 def format_dt(dt: datetime) -> str:
+    """ICS-konforme Zeitformatierung."""
     return dt.astimezone(TZ).strftime("%Y%m%dT%H%M%S")
 
 
 def generate_ics(events, filename="magic.ics"):
+    """Erstellt eine ICS-Datei aus Event-Dictionaries."""
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
         "PRODID:-//Magic Munich Calendar//DE",
         "CALSCALE:GREGORIAN",
+
+        # ⭐ iPhone-Kalendername Fix
+        "X-WR-CALNAME:Minga Boys Magic Kalender",
+        "X-WR-TIMEZONE:Europe/Berlin",
     ]
 
     for ev in events:
@@ -40,7 +46,8 @@ def generate_ics(events, filename="magic.ics"):
         lines.append(f"LOCATION:{ev.get('location', '')}")
         lines.append(f"URL:{ev.get('url', '')}")
 
-        desc = ev.get("description", "").replace("\n", " ").replace("\r", " ")
+        desc = ev.get("description", "")
+        desc = desc.replace("\n", " ").replace("\r", " ")
         lines.append(f"DESCRIPTION:{desc}")
 
         lines.append("END:VEVENT")
@@ -52,7 +59,7 @@ def generate_ics(events, filename="magic.ics"):
 
 
 # ---------------------------------------------------------
-# Store-Namen in Titel einfügen
+# Store-Namen in Titel einfügen (Duplikate vermeiden)
 # ---------------------------------------------------------
 def normalize_event_titles(events):
     for ev in events:
@@ -100,8 +107,10 @@ def main():
 
     print(f"Gesamtanzahl Events: {len(all_events)}")
 
+    # Titel normalisieren
     all_events = normalize_event_titles(all_events)
 
+    # ICS erzeugen
     generate_ics(all_events)
 
 
