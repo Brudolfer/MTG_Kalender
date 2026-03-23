@@ -1,46 +1,35 @@
 import requests
-from bs4 import BeautifulSoup
 from datetime import datetime
 
-BASE_URL = "https://www.fanfinity.gg/magic-the-gathering/"
+API_URL = "https://www.fanfinity.gg/wp-json/wp/v2/event?per_page=100"
 
 def fetch_fanfinity_events():
     events = []
 
-    response = requests.get(BASE_URL, timeout=10)
-    soup = BeautifulSoup(response.text, "html.parser")
+    try:
+        response = requests.get(API_URL, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+    except Exception as e:
+        print("Fanfinity API Fehler:", e)
+        return events
 
-    # Jeder Event-Container ist ein Elementor-Section-Block
-    containers = soup.select(".elementor-widget-wrap.elementor-element-populated section")
+    for item in data:
+        title = item.get("title", {}).get("rendered", "").strip()
+        url = item.get("link", "")
 
-    for c in containers:
-        # Titel + URL
-        title_tag = c.select_one("h1.elementor-heading-title a")
-        if not title_tag:
+        # Datum aus Custom Fields
+        acf = item.get("acf", {})
+        date_str = acf.get("event_date")  # z.B. "2026-05-12"
+
+        if not date_str:
             continue
 
-        title = title_tag.text.strip()
-        url = title_tag["href"]
-
-        # Datum (Fanfinity nutzt z.B. "May 2026")
-        date_tag = c.select_one(".elementor-post-info__item--type-custom")
-        date_text = date_tag.text.strip() if date_tag else None
-
-        # Datum parsen
-        parsed_date = None
-        if date_text:
-            try:
-                parsed_date = datetime.strptime(date_text, "%B %Y")
-            except:
-                pass
-
-        # Falls kein Datum erkannt → überspringen
-        if not parsed_date:
+        try:
+            start = datetime.fromisoformat(date_str)
+            end = start.replace(hour=23, minute=59)
+        except:
             continue
-
-        # Start/Ende setzen (ganzer Tag)
-        start = parsed_date.replace(day=1, hour=9, minute=0)
-        end = parsed_date.replace(day=1, hour=18, minute=0)
 
         events.append({
             "title": title,
@@ -52,4 +41,5 @@ def fetch_fanfinity_events():
             "description": f"Event von Fanfinity: {title}\n{url}"
         })
 
+    print(f"Fanfinity Events gefunden: {len(events)}")
     return events
