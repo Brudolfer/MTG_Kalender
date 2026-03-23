@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 
 URL = "https://www.fanfinity.gg/magic-the-gathering/"
 
@@ -16,6 +16,7 @@ def fetch_fanfinity_events():
 
     soup = BeautifulSoup(response.text, "html.parser")
 
+    # Jeder Event ist ein Elementor Loop Item
     items = soup.select('div[data-elementor-type="loop-item"]')
     print(f"Fanfinity: Gefundene Loop-Items: {len(items)}")
 
@@ -31,23 +32,21 @@ def fetch_fanfinity_events():
         # Datumsteile holen
         date_tags = item.select(".elementor-post-info__item--type-custom")
 
+        # Erwartet: [0] Tag, [1] Monat+Jahr, [2] Read more →
         if len(date_tags) < 2:
             continue
 
-        # Tag = erstes Element
         day_text = date_tags[0].text.strip()
-
-        # Monat + Jahr = zweites Element
         month_year_text = date_tags[1].text.strip()
 
-        # Tag in int umwandeln
+        # Tag extrahieren
         try:
             day = int(day_text)
         except:
             print("Fanfinity: Konnte Tag nicht parsen:", day_text)
             continue
 
-        # Monat + Jahr parsen
+        # Monat + Jahr extrahieren
         try:
             month_year = datetime.strptime(month_year_text, "%B %Y")
         except:
@@ -55,8 +54,11 @@ def fetch_fanfinity_events():
             continue
 
         # Kombiniertes Datum
-        start = month_year.replace(day=day, hour=11, minute=0)
-        end = month_year.replace(day=day, hour=20, minute=0)
+        start = month_year.replace(day=day, hour=0, minute=0)
+
+        # Fanfinity-Events laufen immer Fr–So → +2 Tage
+        end = start + timedelta(days=2)
+        end = end.replace(hour=23, minute=59)
 
         events.append({
             "title": title,
