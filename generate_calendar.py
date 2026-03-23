@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import uuid
-import json
-from datetime import datetime, timedelta
+from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
 
@@ -9,18 +8,21 @@ from pathlib import Path
 from stores.bb_spiele import fetch_bb_spiele_events
 from stores.funtainment import fetch_funtainment_events
 from stores.dd_munich import fetch_dd_munich_events
+from stores.fanfinity import fetch_fanfinity_events
 
 TZ = ZoneInfo("Europe/Berlin")
-HISTORY_FILE = Path("events_history.json")
+
 
 # ---------------------------------------------------------
 # ICS-Helfer
 # ---------------------------------------------------------
 def format_dt(dt: datetime) -> str:
+    """ICS-konforme Zeitformatierung."""
     return dt.astimezone(TZ).strftime("%Y%m%dT%H%M%S")
 
 
 def generate_ics(events, filename="magic.ics"):
+    """Erstellt eine ICS-Datei aus Event-Dictionaries."""
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
@@ -47,89 +49,24 @@ def generate_ics(events, filename="magic.ics"):
         lines.append("END:VEVENT")
 
     lines.append("END:VCALENDAR")
+
     Path(filename).write_text("\n".join(lines), encoding="utf-8")
     print(f"ICS erzeugt: {filename}")
 
 
 # ---------------------------------------------------------
-# Event-History laden/speichern
+# Store-Namen in Titel einfügen (Duplikate vermeiden)
 # ---------------------------------------------------------
-def load_history():
-    if HISTORY_FILE.exists():
-        try:
-            return json.loads(HISTORY_FILE.read_text(encoding="utf-8"))
-        except:
-            return []
-    return []
-
-
-def save_history(events):
-    serializable = []
+def normalize_event_titles(events):
+    """Fügt Store-Namen in den Titel ein, um Duplikate zu vermeiden."""
     for ev in events:
-        serializable.append({
-            "title": ev["title"],
-            "start": ev["start"].isoformat(),
-            "end": ev["end"].isoformat(),
-            "location": ev.get("location", ""),
-            "url": ev.get("url", ""),
-            "description": ev.get("description", "")
-        })
-    HISTORY_FILE.write_text(json.dumps(serializable, indent=2), encoding="utf-8")
+        store = ev.get("store")
+        title = ev.get("title", "")
 
+        if store and store.lower() not in title.lower():
+            ev["title"] = f"{title} ({store})"
 
-# ---------------------------------------------------------
-# Proxy-Event-Generator (12 Wiederholungen)
-# ---------------------------------------------------------
-def generate_proxy_events(event):
-    title = event["title"].lower()
-
-    # ❌ RCQ → niemals Proxy-Events
-    if "rcq" in title or "regional championship qualifier" in title:
-        return []
-
-    # Wöchentliche Serien
-    weekly_formats = [
-        "after work standard",
-        "after work modern",
-        "after work legacy",
-        "after work premodern",
-    ]
-
-    # 14-tägige Serien
-    biweekly_formats = [
-        "friday night modern",
-        "friday night standard",
-    ]
-
-    is_weekly = any(f in title for f in weekly_formats)
-    is_biweekly = any(f in title for f in biweekly_formats)
-
-    if not (is_weekly or is_biweekly):
-        return []
-
-    proxy_events = []
-    start = event["start"]
-    end = event["end"]
-
-    for i in range(1, 13):
-        if is_biweekly:
-            delta = timedelta(weeks=2)
-        else:
-            delta = timedelta(weeks=1)
-
-        new_start = start + delta * i
-        new_end = end + delta * i
-
-        proxy_events.append({
-            "title": event["title"],
-            "start": new_start,
-            "end": new_end,
-            "location": event.get("location", ""),
-            "url": event.get("url", ""),
-            "description": event.get("description", "")
-        })
-
-    return proxy_events
+    return events
 
 
 # ---------------------------------------------------------
@@ -143,75 +80,35 @@ def main():
 
     # BB-Spiele
     try:
-        events = fetch_bb_spiele_events()
-        for ev in events:
-            ev["title"] = f"BB-Spiele – {ev['title']}"
-        all_events.extend(events)
+        all_events.extend(fetch_bb_spiele_events())
     except Exception as e:
         print("Fehler bei BB-Spiele:", e)
 
     # Funtainment
     try:
-        events = fetch_funtainment_events()
-        for ev in events:
-            ev["title"] = f"Funtainment – {ev['title']}"
-        all_events.extend(events)
+        all_events.extend(fetch_funtainment_events())
     except Exception as e:
         print("Fehler bei Funtainment:", e)
 
     # Deck & Dice
     try:
-        events = fetch_dd_munich_events()
-        for ev in events:
-            ev["title"] = f"Deck & Dice – {ev['title']}"
-        all_events.extend(events)
+        all_events.extend(fetch_dd_munich_events())
     except Exception as e:
         print("Fehler bei DD Munich:", e)
 
-    print(f"Neue Events geladen: {len(all_events)}")
+    # Fanfinity
+    try:
+        all_events.extend(fetch_fanfinity_events())
+    except Exception as e:
+        print("Fehler bei Fanfinity:", e)
 
-    # Proxy-Events erzeugen
-    proxy_events = []
-    for ev in all_events:
-        proxy_events.extend(generate_proxy_events(ev))
+    print(f"Gesamtanzahl Events: {len(all_events)}")
 
-    print(f"Erzeugte Proxy-Events: {len(proxy_events)}")
-
-    # Alte Events laden
-    history = load_history()
-
-    restored = []
-    for ev in history:
-        restored.append({
-            "title": ev["title"],
-            "start": datetime.fromisoformat(ev["start"]),
-            "end": datetime.fromisoformat(ev["end"]),
-            "location": ev.get("location", ""),
-            "url": ev.get("url", ""),
-            "description": ev.get("description", "")
-        })
-
-    # Neue + Proxy + alte Events zusammenführen
-    combined = restored + all_events + proxy_events
-
-    # Duplikate entfernen
-    # ❗ Echte Events werden NIE überschrieben
-    unique = {}
-    for ev in combined:
-        key = (ev["title"].lower().strip(), ev["start"].isoformat())
-
-        if key not in unique:
-            unique[key] = ev
-
-    final_events = list(unique.values())
-
-    print(f"Gesamtanzahl Events (inkl. Vergangenheit & Proxy): {len(final_events)}")
-
-    # History aktualisieren
-    save_history(final_events)
+    # Store-Namen in Titel einfügen
+    all_events = normalize_event_titles(all_events)
 
     # ICS erzeugen
-    generate_ics(final_events)
+    generate_ics(all_events)
 
 
 if __name__ == "__main__":
