@@ -16,9 +16,7 @@ def fetch_fanfinity_events():
 
     soup = BeautifulSoup(response.text, "html.parser")
 
-    # Jeder Event ist ein Elementor Loop Item
     items = soup.select('div[data-elementor-type="loop-item"]')
-
     print(f"Fanfinity: Gefundene Loop-Items: {len(items)}")
 
     for item in items:
@@ -30,26 +28,35 @@ def fetch_fanfinity_events():
         title = title_tag.text.strip()
         url = title_tag["href"]
 
-        # Alle Datumselemente holen
+        # Datumsteile holen
         date_tags = item.select(".elementor-post-info__item--type-custom")
 
-        # Wir brauchen mindestens 2 Elemente: [0] Zahl, [1] Datum
         if len(date_tags) < 2:
             continue
 
-        # Das echte Datum ist IMMER das zweite Element
-        date_text = date_tags[1].text.strip()
+        # Tag = erstes Element
+        day_text = date_tags[0].text.strip()
 
-        # Datum parsen (z. B. "May 2026")
+        # Monat + Jahr = zweites Element
+        month_year_text = date_tags[1].text.strip()
+
+        # Tag in int umwandeln
         try:
-            parsed_date = datetime.strptime(date_text, "%B %Y")
+            day = int(day_text)
         except:
-            print("Fanfinity: Konnte Datum nicht parsen:", date_text)
+            print("Fanfinity: Konnte Tag nicht parsen:", day_text)
             continue
 
-        # Start/Ende setzen
-        start = parsed_date.replace(day=1, hour=9, minute=0)
-        end = parsed_date.replace(day=1, hour=18, minute=0)
+        # Monat + Jahr parsen
+        try:
+            month_year = datetime.strptime(month_year_text, "%B %Y")
+        except:
+            print("Fanfinity: Konnte Monat/Jahr nicht parsen:", month_year_text)
+            continue
+
+        # Kombiniertes Datum
+        start = month_year.replace(day=day, hour=11, minute=0)
+        end = month_year.replace(day=day, hour=20, minute=0)
 
         events.append({
             "title": title,
