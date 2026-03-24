@@ -84,7 +84,7 @@ def fetch_racoon_events():
         url = item.get("htmlLink", "")
 
         events.append({
-            "title": f"Racoon Rises – {title}",
+            "title": title,   # ⭐ Prefix NICHT hier setzen!
             "start": start_dt,
             "end": end_dt,
             "location": "Racoon Rises, Ulm",
