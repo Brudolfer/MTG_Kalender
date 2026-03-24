@@ -5,6 +5,7 @@ import requests
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
+from functools import lru_cache
 
 # Stores importieren
 from stores.bb_spiele import fetch_bb_spiele_events
@@ -18,8 +19,9 @@ TZ = ZoneInfo("Europe/Berlin")
 HISTORY_FILE = Path("events_history.json")
 
 # ---------------------------------------------------------
-# Feiertage aus API laden
+# Feiertage aus API laden (mit Cache)
 # ---------------------------------------------------------
+@lru_cache
 def load_bavarian_holidays(year):
     """Lädt alle bayerischen Feiertage eines Jahres aus der Nager.Date API."""
     url = f"https://date.nager.at/api/v3/PublicHolidays/{year}/DE"
@@ -32,7 +34,6 @@ def load_bavarian_holidays(year):
         return set()
 
     holidays = set()
-
     for entry in data:
         counties = entry.get("counties")
         if counties is None or "DE-BY" in counties:
@@ -58,12 +59,14 @@ def generate_ics(events, filename="magic.ics"):
         "X-WR-TIMEZONE:Europe/Berlin",
     ]
 
+    now_str = format_dt(datetime.now(TZ))
+
     for ev in events:
         uid = f"{uuid.uuid4()}@magic-munich"
 
         lines.append("BEGIN:VEVENT")
         lines.append(f"UID:{uid}")
-        lines.append(f"DTSTAMP:{format_dt(datetime.now(TZ))}")
+        lines.append(f"DTSTAMP:{now_str}")
 
         if ev.get("all_day"):
             lines.append(f"DTSTART;VALUE=DATE:{ev['start'].strftime('%Y%m%d')}")
@@ -76,8 +79,7 @@ def generate_ics(events, filename="magic.ics"):
         lines.append(f"LOCATION:{ev.get('location', '')}")
         lines.append(f"URL:{ev.get('url', '')}")
 
-        desc = ev.get("description", "")
-        desc = desc.replace("\n", " ").replace("\r", " ")
+        desc = ev.get("description", "").replace("\n", " ").replace("\r", " ")
         lines.append(f"DESCRIPTION:{desc}")
 
         lines.append("END:VEVENT")
@@ -100,9 +102,8 @@ def load_history():
 
 
 def save_history(events):
-    serializable = []
-    for ev in events:
-        serializable.append({
+    serializable = [
+        {
             "title": ev["title"],
             "start": ev["start"].isoformat(),
             "end": ev["end"].isoformat(),
@@ -110,7 +111,9 @@ def save_history(events):
             "url": ev.get("url", ""),
             "description": ev.get("description", ""),
             "all_day": ev.get("all_day", False)
-        })
+        }
+        for ev in events
+    ]
     HISTORY_FILE.write_text(json.dumps(serializable, indent=2), encoding="utf-8")
 
 
@@ -124,7 +127,6 @@ def generate_proxy_events(event):
     if "rcq" in title or "regional championship qualifier" in title:
         return []
 
-    # Wöchentliche Serien
     weekly_formats = [
         "after work standard",
         "after work modern",
@@ -134,25 +136,18 @@ def generate_proxy_events(event):
         "friday night standard",
     ]
 
-    is_weekly = any(f in title for f in weekly_formats)
-
-    if not is_weekly:
+    if not any(f in title for f in weekly_formats):
         return []
 
     proxy_events = []
 
     start = event["start"]
     end = event["end"]
-
     delta = timedelta(weeks=1)
 
-    # ⭐ Feiertage für Startjahr + Folgejahr laden
-    years = {start.year, start.year + 1}
-    holidays = set()
-    for y in years:
-        holidays |= load_bavarian_holidays(y)
+    # Feiertage für Startjahr + Folgejahr
+    holidays = load_bavarian_holidays(start.year) | load_bavarian_holidays(start.year + 1)
 
-    # ⭐ Bis Jahresende generieren
     year_end = datetime(start.year, 12, 31, tzinfo=TZ)
 
     next_start = start + delta
@@ -185,59 +180,27 @@ def main():
 
     all_events = []
 
-    # BB-Spiele
-    try:
-        events = fetch_bb_spiele_events()
-        for ev in events:
-            ev["title"] = f"BB-Spiele – {ev['title']}"
-        all_events.extend(events)
-    except Exception as e:
-        print("Fehler bei BB-Spiele:", e)
+    # --- STORES ---
+    stores = [
+        ("BB-Spiele", fetch_bb_spiele_events, "BB-Spiele – "),
+        ("Funtainment", fetch_funtainment_events, "Funtainment – "),
+        ("Deck & Dice", fetch_dd_munich_events, "Deck & Dice – "),
+        ("Fanfinity", fetch_fanfinity_events, "Fanfinity – "),
+        ("Countdown Spielewelt", fetch_countdown_events, "Countdown – "),
+        ("Racoon Rises", fetch_racoon_events, "Racoon Rises – "),
+    ]
 
-    # Funtainment
-    try:
-        events = fetch_funtainment_events()
-        for ev in events:
-            ev["title"] = f"Funtainment – {ev['title']}"
-        all_events.extend(events)
-    except Exception as e:
-        print("Fehler bei Funtainment:", e)
-
-    # Deck & Dice
-    try:
-        events = fetch_dd_munich_events()
-        for ev in events:
-            ev["title"] = f"Deck & Dice – {ev['title']}"
-        all_events.extend(events)
-    except Exception as e:
-        print("Fehler bei DD Munich:", e)
-
-    # Fanfinity
-    try:
-        events = fetch_fanfinity_events()
-        for ev in events:
-            ev["title"] = f"Fanfinity – {ev['title']}"
-        all_events.extend(events)
-    except Exception as e:
-        print("Fehler bei Fanfinity:", e)
+    for name, fetcher, prefix in stores:
+        try:
+            events = fetcher()
+            print(f"{name}: {len(events)} Events gefunden")
+            for ev in events:
+                ev["title"] = f"{prefix}{ev['title']}"
+            all_events.extend(events)
+        except Exception as e:
+            print(f"Fehler bei {name}: {e}")
 
     print(f"Neue Events geladen: {len(all_events)}")
-
-    # Countdown Spielewelt
-    try:
-        events = fetch_countdown_events()
-        for ev in events:
-            ev["title"] = f"Countdown – {ev['title']}"
-        all_events.extend(events)
-    except Exception as e:
-        print("Fehler bei Countdown Spielewelt:", e)
-
-    # Racoon Rises
-    try:
-        events = fetch_racoon_events()
-        all_events.extend(events)
-    except Exception as e:
-        print("Fehler bei Racoon Rises:", e)
 
     # Proxy-Events erzeugen
     proxy_events = []
@@ -249,7 +212,7 @@ def main():
     # Alte Events laden
     history = load_history()
 
-    # ⭐ History filtern: keine Events an Feiertagen wiederherstellen
+    # Feiertage für History filtern
     restored = []
     if history:
         years = {datetime.now(TZ).year, datetime.now(TZ).year + 1}
@@ -271,7 +234,7 @@ def main():
                 "all_day": ev.get("all_day", False)
             })
 
-    # Neue + Proxy + alte Events zusammenführen
+    # Events zusammenführen
     combined = restored + all_events + proxy_events
 
     # Duplikate entfernen
