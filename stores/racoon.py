@@ -20,30 +20,37 @@ def fetch_racoon_events():
 
     soup = BeautifulSoup(response.text, "html.parser")
 
-    # Jeder Tag ist ein Block
-    day_blocks = soup.select(".rr-day")
+    # Jeder Tag ist ein <section class="day">
+    day_blocks = soup.select("section.day")
 
     if not day_blocks:
-        print("WARNUNG: Keine .rr-day Blöcke gefunden – Struktur prüfen!")
+        print("WARNUNG: Keine <section class='day'> Blöcke gefunden!")
         return []
 
     for day in day_blocks:
         # Datum extrahieren
-        date_tag = day.select_one(".rr-date")
+        date_tag = day.select_one(".day-head div")
         if not date_tag:
             continue
 
-        date_text = date_tag.get_text(strip=True)  # z.B. "27. April 2026"
+        date_text = date_tag.get_text(strip=True)  # z.B. "Mittwoch, 1. April 2026"
+
+        # Wochentag entfernen
         try:
-            date_obj = datetime.strptime(date_text, "%d. %B %Y").date()
+            date_text_clean = date_text.split(",", 1)[1].strip()
+        except:
+            continue
+
+        try:
+            date_obj = datetime.strptime(date_text_clean, "%d. %B %Y").date()
         except:
             continue
 
         # Events des Tages
-        event_blocks = day.select(".rr-event")
+        event_blocks = day.select(".day-items .ev")
 
         for ev in event_blocks:
-            title_tag = ev.select_one(".rr-event-title")
+            title_tag = ev.select_one(".ev-title")
             if not title_tag:
                 continue
 
@@ -59,7 +66,7 @@ def fetch_racoon_events():
                 continue
 
             # Zeit extrahieren
-            time_tag = ev.select_one(".rr-event-time")
+            time_tag = ev.select_one(".ev-time")
             if not time_tag:
                 continue
 
@@ -81,9 +88,8 @@ def fetch_racoon_events():
             except:
                 continue
 
-            # URL extrahieren
-            cta = ev.select_one(".rr-event-cta")
-            url = cta.get("href") if cta else ""
+            # URL extrahieren (Button hat keinen Link → wir lassen es leer)
+            url = ""
 
             # Beschreibung
             desc = ""
@@ -96,7 +102,7 @@ def fetch_racoon_events():
                 "title": f"Racoon Rises – {title_raw}",
                 "start": start_dt,
                 "end": end_dt,
-                "location": "Racoon Rises, München",
+                "location": "Racoon Rises, Ulm",
                 "url": url,
                 "description": desc,
                 "all_day": False
