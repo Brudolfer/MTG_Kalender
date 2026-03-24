@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo
 TZ = ZoneInfo("Europe/Berlin")
 
 BASE_URL = "https://countdown-spielewelt.de/events/liste/seite/{}/"
+MAX_PAGES = 15   # ⭐ Limit für schnellere Builds
 
 
 def fetch_countdown_events():
@@ -14,6 +15,10 @@ def fetch_countdown_events():
     page = 1
 
     while True:
+        if page > MAX_PAGES:
+            print(f"Abbruch nach {MAX_PAGES} Seiten (Testmodus).")
+            break
+
         url = BASE_URL.format(page)
         print(f"Lade Countdown-Seite {page}: {url}")
 
@@ -68,7 +73,6 @@ def fetch_countdown_events():
                 continue
 
             # Startzeit extrahieren
-            # Beispiel: "26 April | 11:00"
             start_text = start_span.get_text(strip=True)
             start_time = start_text.split("|")[-1].strip()
 
