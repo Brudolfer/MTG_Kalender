@@ -21,11 +21,15 @@ def fetch_racoon_events():
     soup = BeautifulSoup(response.text, "html.parser")
 
     # Jeder Tag ist ein Block
-    day_blocks = soup.select(".day")
+    day_blocks = soup.select(".rr-day")
+
+    if not day_blocks:
+        print("WARNUNG: Keine .rr-day Blöcke gefunden – Struktur prüfen!")
+        return []
 
     for day in day_blocks:
         # Datum extrahieren
-        date_tag = day.select_one(".day-title")
+        date_tag = day.select_one(".rr-date")
         if not date_tag:
             continue
 
@@ -36,15 +40,14 @@ def fetch_racoon_events():
             continue
 
         # Events des Tages
-        event_blocks = day.select(".ev")
+        event_blocks = day.select(".rr-event")
 
         for ev in event_blocks:
-            title_tag = ev.select_one(".ev-title")
+            title_tag = ev.select_one(".rr-event-title")
             if not title_tag:
                 continue
 
             title_raw = title_tag.get_text(strip=True)
-
             title_lower = title_raw.lower()
 
             # ⭐ Filter: Nur RCQs oder Monthly Legacy
@@ -56,7 +59,7 @@ def fetch_racoon_events():
                 continue
 
             # Zeit extrahieren
-            time_tag = ev.select_one(".ev-time")
+            time_tag = ev.select_one(".rr-event-time")
             if not time_tag:
                 continue
 
@@ -78,11 +81,11 @@ def fetch_racoon_events():
             except:
                 continue
 
-            # URL extrahieren (falls vorhanden)
-            cta = ev.select_one(".ev-cta a")
+            # URL extrahieren
+            cta = ev.select_one(".rr-event-cta")
             url = cta.get("href") if cta else ""
 
-            # Beschreibung (optional)
+            # Beschreibung
             desc = ""
             if "rcq" in title_lower:
                 desc = "Regional Championship Qualifier"
