@@ -2439,15 +2439,6 @@
     "all_day": false
   },
   {
-    "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
-    "start": "2026-04-03T18:30:00+02:00",
-    "end": "2026-04-03T21:30:00+02:00",
-    "location": "Deck & Dice Munich",
-    "url": "https://www.dd-munich.de",
-    "description": "",
-    "all_day": false
-  },
-  {
     "title": "MTGO \u2013 Modern Preliminary",
     "start": "2026-03-26T07:00:00+01:00",
     "end": "2026-03-26T09:00:00+01:00",
@@ -2678,6 +2669,15 @@
     "end": "2026-03-27T17:00:00+01:00",
     "location": "MTGO",
     "url": "",
+    "description": "",
+    "all_day": false
+  },
+  {
+    "title": "Deck & Dice \u2013 Friday Night Modern 18.30",
+    "start": "2026-04-03T18:30:00+02:00",
+    "end": "2026-04-03T21:30:00+02:00",
+    "location": "Deck & Dice Munich",
+    "url": "https://www.dd-munich.de",
     "description": "",
     "all_day": false
   }
