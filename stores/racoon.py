@@ -1,92 +1,116 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+import re
 
 TZ = ZoneInfo("Europe/Berlin")
 
-# KORREKTE Domain: racoon-rises.com (ein c, .com)
-RACOON_URL = "https://racoon-rises.com/wp-json/tribe/events/v1/events"
-
-LEGACY_KEYWORDS = [
-    "legacy",
-    "elm quali",
-    "elm qualifier",
-    "eternal",
-    "eternal weekend",
-    "ewk",
-]
-
-def detect_format(title: str):
-    t = title.lower()
-
-    # Legacy
-    if any(k in t for k in LEGACY_KEYWORDS):
-        return "Legacy"
-
-    # Modern
-    if "modern" in t:
-        return "Modern"
-
-    # Commander
-    if "commander" in t or "edh" in t:
-        return "Commander"
-
-    # Draft / Sealed
-    if "draft" in t:
-        return "Draft"
-    if "sealed" in t:
-        return "Sealed"
-
-    return "Unknown"
+CALENDAR_ID = "c_7f090f10dbb843c0bac91ed58594c85b7ac59c12d1764b34a586dd01ca7a8502@group.calendar.google.com"
+EVENTS_PAGE = "https://racoon-rises.com/pages/events"
 
 
-def normalize_title(title: str, fmt: str):
-    t = title.lower()
+def _extract_google_api_key():
+    """
+    Holt den Google API Key direkt aus dem HTML der Events-Seite.
+    Der Key ist öffentlich eingebettet, daher sicher zu verwenden.
+    """
+    try:
+        html = requests.get(EVENTS_PAGE, timeout=10).text
+    except Exception as e:
+        print("Fehler beim Laden der Racoon-Events-Seite:", e)
+        return None
 
-    # Normalize ELM Qualifier
-    if "elm" in t:
+    # Suche nach einem Google API Key im HTML
+    match = re.search(r"AIza[0-9A-Za-z\-_]{35}", html)
+    return match.group(0) if match else None
+
+
+def _normalize_title(raw_title: str) -> str:
+    """
+    Normalisiert bestimmte Event-Namen, ohne das Schema zu ändern.
+    Beispiel:
+    - ELM / Qualifier / Eternal Weekend → "Legacy Qualifier"
+    """
+    t = raw_title.lower()
+
+    if "elm" in t or "eternal weekend" in t or "ewk" in t:
         return "Legacy Qualifier"
 
-    return title
+    return raw_title
 
 
 def fetch_racoon_events():
     events = []
-    page = 1
 
-    while True:
-        try:
-            resp = requests.get(RACOON_URL, params={"page": page}, timeout=15)
-            resp.raise_for_status()
-        except Exception as e:
-            print(f"Racoon: Fehler beim Laden (Seite {page}): {e}")
-            break
+    api_key = _extract_google_api_key()
+    if not api_key:
+        print("Fehler: Kein Google API Key auf der Racoon-Seite gefunden.")
+        return []
 
-        data = resp.json()
+    base_url = (
+        "https://content.googleapis.com/calendar/v3/calendars/"
+        + CALENDAR_ID
+        + "/events"
+    )
 
-        for ev in data.get("events", []):
-            title = ev["title"]
-            fmt = detect_format(title)
-            title = normalize_title(title, fmt)
+    now = datetime.now(TZ)
+    one_year = now + timedelta(days=365)
 
-            start = datetime.fromisoformat(ev["start_date"]).astimezone(TZ)
-            end = datetime.fromisoformat(ev["end_date"]).astimezone(TZ)
+    params = {
+        "timeMin": now.isoformat(),
+        "timeMax": one_year.isoformat(),
+        "singleEvents": "true",
+        "orderBy": "startTime",
+        "maxResults": "2500",
+        "showDeleted": "false",
+        "key": api_key,
+    }
 
-            events.append({
-                "title": f"Racoon – {title}",
-                "format": fmt,
-                "start": start,
-                "end": end,
-                "location": "Racoon Rises, München",
-                "url": ev.get("url", ""),
-                "description": ev.get("excerpt", ""),
-                "all_day": False
-            })
+    try:
+        response = requests.get(base_url, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+    except Exception as e:
+        print("Fehler beim Laden des Racoon-Google-Calendars:", e)
+        return []
 
-        # Pagination beendet?
-        if not data.get("next_rest_url"):
-            break
+    for item in data.get("items", []):
+        title = item.get("summary", "") or ""
+        title_lower = title.lower()
 
-        page += 1
+        # Filter: RCQ, Monthly Legacy, ELM / Eternal Weekend
+        if not (
+            "rcq" in title_lower
+            or "regional championship qualifier" in title_lower
+            or "monthly legacy" in title_lower
+            or "elm" in title_lower
+            or "eternal weekend" in title_lower
+            or "ewk" in title_lower
+        ):
+            continue
+
+        start_info = item.get("start", {})
+        end_info = item.get("end", {})
+
+        if "dateTime" not in start_info or "dateTime" not in end_info:
+            continue
+
+        start_dt = datetime.fromisoformat(start_info["dateTime"]).astimezone(TZ)
+        end_dt = datetime.fromisoformat(end_info["dateTime"]).astimezone(TZ)
+
+        desc = item.get("description", "") or ""
+        url = item.get("htmlLink", "") or ""
+
+        normalized_title = _normalize_title(title)
+
+        events.append({
+            "title": normalized_title,   # kein Prefix hier, Schema bleibt wie vorher
+            "start": start_dt,
+            "end": end_dt,
+            "location": "Racoon Rises, Ulm",
+            "url": url,
+            "description": desc,
+            "all_day": False
+        })
 
     return events
