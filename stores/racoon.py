@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 
 TZ = ZoneInfo("Europe/Berlin")
 
+# Domain mit EINEM c – korrekt für Racoon Rises
 RACOON_URL = "https://racoon-rises.de/wp-json/tribe/events/v1/events"
 
 LEGACY_KEYWORDS = [
@@ -54,7 +55,13 @@ def fetch_racoon_events():
     page = 1
 
     while True:
-        resp = requests.get(RACOON_URL, params={"page": page})
+        try:
+            resp = requests.get(RACOON_URL, params={"page": page}, timeout=15)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"Racoon: Fehler beim Laden (Seite {page}): {e}")
+            break
+
         data = resp.json()
 
         for ev in data.get("events", []):
@@ -76,6 +83,7 @@ def fetch_racoon_events():
                 "all_day": False
             })
 
+        # Pagination beendet?
         if not data.get("next_rest_url"):
             break
 
