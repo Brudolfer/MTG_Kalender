@@ -119,9 +119,9 @@ def save_history(events):
 
 
 # ---------------------------------------------------------
-# Proxy-Event-Generator (Feiertage skippen)
+# Proxy-Event-Generator (NEU: nur wenn Tag leer ist)
 # ---------------------------------------------------------
-def generate_proxy_events(event):
+def generate_proxy_events(event, events_by_date):
     title = event["title"].lower()
 
     # ❌ RCQ → niemals Proxy-Events
@@ -146,15 +146,21 @@ def generate_proxy_events(event):
     end = event["end"]
     delta = timedelta(weeks=1)
 
-    # Feiertage für Startjahr + Folgejahr
     holidays = load_bavarian_holidays(start.year) | load_bavarian_holidays(start.year + 1)
-
     year_end = datetime(start.year, 12, 31, tzinfo=TZ)
 
     next_start = start + delta
     next_end = end + delta
 
     while next_start <= year_end:
+
+        # 🟩 NEU: Wenn der Store echte Events für diesen Tag hat → KEINE Proxy-Events
+        if next_start.date() in events_by_date:
+            next_start += delta
+            next_end += delta
+            continue
+
+        # Feiertage skippen
         if next_start.date() not in holidays:
             proxy_events.append({
                 "title": event["title"],
@@ -204,10 +210,16 @@ def main():
 
     print(f"Neue Events geladen: {len(all_events)}")
 
-    # Proxy-Events erzeugen
+    # 🟩 NEU: Events nach Datum gruppieren
+    events_by_date = {}
+    for ev in all_events:
+        d = ev["start"].date()
+        events_by_date.setdefault(d, []).append(ev)
+
+    # Proxy-Events erzeugen (NEU: mit events_by_date)
     proxy_events = []
     for ev in all_events:
-        proxy_events.extend(generate_proxy_events(ev))
+        proxy_events.extend(generate_proxy_events(ev, events_by_date))
 
     print(f"Erzeugte Proxy-Events: {len(proxy_events)}")
 
