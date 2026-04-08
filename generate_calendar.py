@@ -26,7 +26,6 @@ HISTORY_FILE = Path("events_history.json")
 # ---------------------------------------------------------
 @lru_cache
 def load_bavarian_holidays(year):
-    """Lädt alle bayerischen Feiertage eines Jahres aus der Nager.Date API."""
     url = f"https://date.nager.at/api/v3/PublicHolidays/{year}/DE"
     try:
         response = requests.get(url, timeout=10)
@@ -121,12 +120,11 @@ def save_history(events):
 
 
 # ---------------------------------------------------------
-# Proxy-Event-Generator (NEU: nur wenn Tag leer ist)
+# Proxy-Event-Generator
 # ---------------------------------------------------------
 def generate_proxy_events(event, events_by_date):
     title = event["title"].lower()
 
-    # ❌ RCQ → niemals Proxy-Events
     if "rcq" in title or "regional championship qualifier" in title:
         return []
 
@@ -156,13 +154,11 @@ def generate_proxy_events(event, events_by_date):
 
     while next_start <= year_end:
 
-        # 🟩 NEU: Wenn der Store echte Events für diesen Tag hat → KEINE Proxy-Events
         if next_start.date() in events_by_date:
             next_start += delta
             next_end += delta
             continue
 
-        # Feiertage skippen
         if next_start.date() not in holidays:
             proxy_events.append({
                 "title": event["title"],
@@ -189,7 +185,6 @@ def main():
 
     all_events = []
 
-    # --- STORES ---
     stores = [
         ("BB-Spiele", fetch_bb_spiele_events, "BB-Spiele – "),
         ("Funtainment", fetch_funtainment_events, "Funtainment – "),
@@ -208,19 +203,23 @@ def main():
             print(f"{name}: {len(events)} Events gefunden")
             for ev in events:
                 ev["title"] = f"{prefix}{ev['title']}"
+                ev["source"] = name   # 🟩 Quelle speichern
             all_events.extend(events)
         except Exception as e:
             print(f"Fehler bei {name}: {e}")
 
     print(f"Neue Events geladen: {len(all_events)}")
 
-    # 🟩 NEU: Events nach Datum gruppieren
+    # 🟩 MTGO-Events ausblenden
+    all_events = [e for e in all_events if e["source"] != "MTGO"]
+
+    # Events nach Datum gruppieren
     events_by_date = {}
     for ev in all_events:
         d = ev["start"].date()
         events_by_date.setdefault(d, []).append(ev)
 
-    # Proxy-Events erzeugen (NEU: mit events_by_date)
+    # Proxy-Events erzeugen
     proxy_events = []
     for ev in all_events:
         proxy_events.extend(generate_proxy_events(ev, events_by_date))
@@ -230,7 +229,6 @@ def main():
     # Alte Events laden
     history = load_history()
 
-    # Feiertage für History filtern
     restored = []
     if history:
         now = datetime.now(TZ).date()
@@ -243,7 +241,6 @@ def main():
             start_dt = datetime.fromisoformat(ev["start"])
             start_date = start_dt.date()
 
-            # Nur vergangene Events wiederherstellen
             if start_date >= now:
                 continue
 
@@ -260,10 +257,8 @@ def main():
                 "all_day": ev.get("all_day", False)
             })
 
-    # Events zusammenführen
     combined = restored + all_events + proxy_events
 
-    # Duplikate entfernen
     unique = {}
     for ev in combined:
         key = (ev["title"].lower().strip(), ev["start"].isoformat())
@@ -274,10 +269,8 @@ def main():
 
     print(f"Gesamtanzahl Events (inkl. Vergangenheit & Proxy): {len(final_events)}")
 
-    # History aktualisieren
     save_history(final_events)
 
-    # ICS erzeugen
     generate_ics(final_events)
 
 
