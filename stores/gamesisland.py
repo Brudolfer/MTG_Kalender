@@ -38,22 +38,13 @@ def detect_format(title):
 def fetch_gamesisland_events():
     events = []
 
-    # Seiten 1–5 scrapen
     for page in range(1, 6):
         url = PAGE_URL.format(page)
 
-        try:
-            r = requests.get(url, timeout=10, headers={
-                "User-Agent": "Mozilla/5.0"
-            })
-            r.raise_for_status()
-        except Exception as e:
-            print("Games Island Fehler:", e)
-            continue
-
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
         soup = BeautifulSoup(r.text, "html.parser")
 
-        # WICHTIG: Datefix liefert KEIN itemtype → wir müssen .terminitem scrapen
+        # WICHTIG: Datefix liefert Events unter .terminitem
         items = soup.select(".terminitem")
 
         if not items:
