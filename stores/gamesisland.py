@@ -6,19 +6,14 @@ import re
 
 TZ = ZoneInfo("Europe/Berlin")
 
-BASE_URL = "https://games-island.eu"
-LIST_URL = "https://games-island.eu/Events"
+BASE_URL = "https://www.datefix.de"
+LIST_URL = "https://www.datefix.de/kalender/5800"
 
 # ---------------------------------------------------------
-# Hilfsfunktionen
+# Zeitbereich parsen
 # ---------------------------------------------------------
 
 def parse_time_range(text):
-    """
-    Parst Zeitangaben wie:
-    '15:00 Uhr bis 22:00 Uhr'
-    '18:00 Uhr'
-    """
     text = text.lower()
 
     # Start + Ende
@@ -31,10 +26,13 @@ def parse_time_range(text):
     m2 = re.search(r"(\d{1,2}):(\d{2})", text)
     if m2:
         sh, sm = m2.groups()
-        return int(sh), int(sm), int(sh) + 4, int(sm)  # Default 4h Dauer
+        return int(sh), int(sm), int(sh) + 6, int(sm)  # Default 6h
 
     return None
 
+# ---------------------------------------------------------
+# Format erkennen
+# ---------------------------------------------------------
 
 def detect_format(title):
     t = title.lower()
@@ -47,7 +45,6 @@ def detect_format(title):
     if "sealed" in t or "limited" in t or "draft" in t:
         return "Limited"
     return "Magic Event"
-
 
 # ---------------------------------------------------------
 # Hauptfunktion
@@ -65,38 +62,36 @@ def fetch_gamesisland_events():
 
     soup = BeautifulSoup(r.text, "html.parser")
 
-    # Jeder Event ist ein <div itemscope itemtype="http://schema.org/Event">
     items = soup.select("[itemtype='http://schema.org/Event']")
 
     for item in items:
         title_tag = item.select_one("[itemprop='name']")
         start_meta = item.select_one("meta[itemprop='startDate']")
         time_text = item.select_one(".dfx-zeit-liste-dreizeilig")
-        link_tag = item.select_one("a[href]")
         location_tag = item.select_one("[itemprop='location'] [itemprop='name']")
+        link_tag = item.select_one("a[href]")
 
         if not title_tag or not start_meta:
             continue
 
         title = title_tag.get_text(strip=True)
+        lowered = title.lower()
 
         # ---------------------------------------------------------
-        # Nur RCQs / Destination Qualifier / DQ
+        # Nur RCQ / Destination Qualifier / DQ
         # ---------------------------------------------------------
-        lowered = title.lower()
         if not (
             "rcq" in lowered
-            or "regional championship qualifier" in lowered
             or "destination qualifier" in lowered
-            or "dq" in lowered
+            or "regional championship qualifier" in lowered
+            or re.search(r"\bdq\b", lowered)
         ):
             continue
 
-        # Startzeit aus meta
-        start_iso = start_meta["content"]  # z.B. 2026-04-08T13:00
-        start_dt = datetime.fromisoformat(start_iso).replace(tzinfo=TZ)
+        # Startzeit
+        start_dt = datetime.fromisoformat(start_meta["content"]).replace(tzinfo=TZ)
 
-        # Ende parsen
+        # Ende
         if time_text:
             parsed = parse_time_range(time_text.get_text())
         else:
@@ -116,7 +111,6 @@ def fetch_gamesisland_events():
         # Location
         location = location_tag.get_text(strip=True) if location_tag else "Games Island"
 
-        # Format
         fmt = detect_format(title)
 
         events.append({
