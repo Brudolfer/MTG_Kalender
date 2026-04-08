@@ -14,6 +14,7 @@ from stores.dd_munich import fetch_dd_munich_events
 from stores.fanfinity import fetch_fanfinity_events
 from stores.countdown import fetch_countdown_events
 from stores.racoon import fetch_racoon_events
+from stores.magicpapa import fetch_magicpapa_events
 from stores.mtgo import fetch_mtgo_events  # ⭐ NEU
 
 TZ = ZoneInfo("Europe/Berlin")
@@ -195,6 +196,7 @@ def main():
         ("Fanfinity", fetch_fanfinity_events, "Fanfinity – "),
         ("Countdown Spielewelt", fetch_countdown_events, "Countdown – "),
         ("Racoon Rises", fetch_racoon_events, "Racoon Rises – "),
+        ("Magic Papa", fetch_magicpapa_events, "Magic Papa – "),
         ("MTGO", fetch_mtgo_events, "MTGO – "),  # ⭐ NEU
     ]
 
@@ -229,15 +231,23 @@ def main():
     # Feiertage für History filtern
     restored = []
     if history:
-        years = {datetime.now(TZ).year, datetime.now(TZ).year + 1}
+        now = datetime.now(TZ).date()
+        years = {now.year, now.year + 1}
         holidays = set()
         for y in years:
             holidays |= load_bavarian_holidays(y)
 
         for ev in history:
             start_dt = datetime.fromisoformat(ev["start"])
-            if start_dt.date() in holidays:
+            start_date = start_dt.date()
+
+            # Nur vergangene Events wiederherstellen
+            if start_date >= now:
                 continue
+
+            if start_date in holidays:
+                continue
+
             restored.append({
                 "title": ev["title"],
                 "start": start_dt,
