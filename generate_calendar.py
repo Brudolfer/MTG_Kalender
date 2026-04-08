@@ -15,7 +15,8 @@ from stores.fanfinity import fetch_fanfinity_events
 from stores.countdown import fetch_countdown_events
 from stores.racoon import fetch_racoon_events
 from stores.magicpapa import fetch_magicpapa_events
-from stores.mtgo import fetch_mtgo_events  # ⭐ NEU
+from stores.gamesisland import fetch_gamesisland_events
+from stores.mtgo import fetch_mtgo_events
 
 TZ = ZoneInfo("Europe/Berlin")
 HISTORY_FILE = Path("events_history.json")
@@ -197,7 +198,8 @@ def main():
         ("Countdown Spielewelt", fetch_countdown_events, "Countdown – "),
         ("Racoon Rises", fetch_racoon_events, "Racoon Rises – "),
         ("Magic Papa", fetch_magicpapa_events, "Magic Papa – "),
-        ("MTGO", fetch_mtgo_events, "MTGO – "),  # ⭐ NEU
+        ("Games Island", fetch_gamesisland_events, "Games Island – "),
+        ("MTGO", fetch_mtgo_events, "MTGO – "),
     ]
 
     for name, fetcher, prefix in stores:
