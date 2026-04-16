@@ -8,15 +8,5 @@
     "description": "RCQ Pioneer am 20.05.2026 11-18 in München",
     "all_day": false,
     "source": "MANUAL"
-  },
-  {
-    "title": "Modern",
-    "start": "2026-04-20T19:00:00+02:00",
-    "end": "2026-04-20T23:00:00+02:00",
-    "location": "Unbekannt",
-    "url": "",
-    "description": "Modern am 20.04. 19-23 Uhr im deck&Dice Munich",
-    "all_day": false,
-    "source": "MANUAL"
   }
 ]
