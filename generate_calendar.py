@@ -152,7 +152,7 @@ def load_manual_events():
 
 
 # ---------------------------------------------------------
-# Proxy-Event-Generator
+# Proxy-Event-Generator (korrigiert)
 # ---------------------------------------------------------
 def generate_proxy_events(event, events_by_date):
     title = event["title"].lower()
@@ -197,7 +197,7 @@ def generate_proxy_events(event, events_by_date):
                 "start": next_start,
                 "end": next_end,
                 "location": event.get("location", ""),
-                "url": ev.get("url", ""),
+                "url": event.get("url", ""),   # FIXED
                 "description": event.get("description", ""),
                 "all_day": event.get("all_day", False)
             })
